@@ -1,4 +1,5 @@
 <template>
+<!-- 顾客管理 -->
     <div>
         <!--按钮-->
         <el-button size="small" type="success" @click="toAddHandler">添加</el-button>
@@ -55,14 +56,14 @@
 </template>
 
 <script>
-import requset from '@/utils/request'
+import request from '@/utils/request'
 import querystring from 'querystring'
 export default {
     //用于存放要向网页中存放的方法
     methods:{
         loadData(){
     let url = "http://localhost:6677/customer/findAll"
-        requset.get(url).then((response)=>{
+        request.get(url).then((response)=>{
             //将查询结果设置到customers中,this指向外部函数的this
             this.customers=response.data;
     })
@@ -72,11 +73,11 @@ export default {
             //this.form 对象---字符串-->后台
             //通过request与后台进行交互，并且要携带参数
             let url ="http://localhost:6677/customer/saveOrUpdate"
-            requset({
+            request({
                 url,
                 method:"POST",
                 headers:{
-                    "Content-Tye":"application/x-www-form-urlencoded"
+                    "Content-Type":"application/x-www-form-urlencoded"
                 },
                 data:querystring.stringify(this.form)
             }).then((response)=>{
@@ -112,19 +113,19 @@ export default {
             type: 'warning'
             }).then(() => {
                 //调用后台接口，完成删除操作
-                let url = "http://localhost:6677/customer/deleteById?id"+id;
+                let url = "http://localhost:6677/customer/deleteById?id="+id;
                 request.get(url).then((response)=>{
                     //1.刷新数据
                     this.loadData();
                     //2.提示结果
-                        this.$message({
-                        type: 'success',
-                        message: response.message
-                    });
+                    this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                        });
                 })
                      
             });
-        }
+        },
     },
     //用于存放要向网页中存放的数据
     data(){
